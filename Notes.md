@@ -90,7 +90,7 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
 * accuracy ~distance of mean of measured result from the real value 
     * accuracy is a measure of calibration
 
-# ADC and DAC
+# Chapter 3 - ADC and DAC
 
 ## Quantization
 
@@ -220,7 +220,7 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
             * unclear *when* a sample is taken, since it's done over multiple clocks. Difficult to use for
               time domain processing.
 
-# DSP Software
+# Chapter 4 - DSP Software
 
 ## Computer Numbers
 
@@ -254,7 +254,7 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
 * use LUTs
 * profile your code
 
-# Linear Systems
+# Chapter 5 - Linear Systems
 
 ## Signals and Systems
 
@@ -322,7 +322,7 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
         * e.g. instead of a = b * c -> log(a) = log(b) + log(c)
 
 
-# Convolution
+# Chapter 6 - Convolution
 
 ## The Delta Function and Impulse Response
 
