@@ -270,5 +270,62 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
 
 ## Static Linearity and Sinusoidal Fidelity
 
+* static linearity and sinusoidal fidelity help with intuitive understanding of what a linear system is.
+* static linearity: the output is the input multiplied by a constant
+* sinusoidal fidelity: If the input to a linear system is a sinusoidal wave, the output will also be a 
+  sinusoidal wave, and at exactly the same frequency as the input.
+    * sinusoids are the only waveforms with this characteristic.
 
+## Examples of Linear and Nonlinear Systems
+
+...
+
+## Special Properties of Linearity
+
+* commutative: 2 linear systems can be cascaded one way or the other, the final output is the same.
+* multiplication is linear as long as one of the inputs is a constant
+
+## Superposition: the Foundation of DSP
+
+* synthesis: the process of combining signals through scaling and addition
+* decomposition: the inverse operation where a signal is broken up into two or more additive components
+* superposition: the overall strategy for understanding how signals and systems can be analyzed
+    * e.g. a signal x[n] can be split into different impulse signals: input signal components)
+    * these are then sent through the system: output signal components
+    * added back together: synthesized into y[n]
+
+## Common Decompositions
+
+* impulse decomposition
+* step decomposition
+* even/odd decomposition
+    * even signal: where y[n] is mirrored around N/2
+    * odd signal: where y[n] is the opposite around N/2
+* circular symmetry
+    * the end of a signal is linked to the beginning of the signal
+    * important for Fourier analysis
+* interlaced decomposition
+    * even samples with zeros in between, odd samples with zeros in between
+    * used to calculate FFTs
+* Fourier decomposition
+    * N-point signal is decomposed into N+2 signals: half sine waves and half cosine waves
+    * the only thing different for different inputs are different amplitudes
+    * basis for Fourier analysis, Laplace and z-transforms
+
+## Alternatives to Linearity
+
+* only one way major strategy to deal with non-linear systems: make them resemble a linear system
+* how?
+    * ignore the non-linearity
+    * keep signals small (e.g. transistors)
+    * apply linearizing transform / homomorphic transformation 
+        * e.g. instead of a = b * c -> log(a) = log(b) + log(c)
+
+
+# Convolution
+
+## The Delta Function and Impulse Response
+
+* backbone of DSP: impulse and Fourier decomposition
+* when impulse decomposition is used 
 
