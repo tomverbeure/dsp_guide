@@ -329,3 +329,107 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
 * backbone of DSP: impulse and Fourier decomposition
 * when impulse decomposition is used 
 
+* normalized impulse response: 1 at sample 0, 0 everywhere else -> unit impluse
+* impulse response: h[n]
+
+## Convolution
+
+* for a filter, the impulse response is called "filter kernel", "convolution kernel" or "kernel"
+* for image processing, it's called "point spread function"
+* output signal length = input signal length + impulse response length -1
+
+## The Input Side Algorithm
+
+* x[4]h[n-4]  : the contribution of impulse response for sample 4 = all samples of h, shifted by 4.
+* convolution is commmutative
+* Center equation of the calculation loop: y[i+j] += x[i] * h[i]
+
+## The Output Side Algorithm
+
+* Center equation of the calculation loop: y[i] += h[j] * x(i-j)
+    * Since the math uses y = f(x), the output side equation is what's used in the mathematical
+      definition.
+
+* h[n] is flipped left-for-right: 
+    * The impulse response describes how each point in the input signal affects the output signal.
+    * This results in each point in the output signal being affected by points in the input signal 
+      weighted by a flipped impulse response.
+* Padding is needed for samples on the left and the right. These zeros can result in bogus results
+  on the left and the right.
+
+## Sum of Weighted Inputs
+
+# Chapter 7 - Properties of Convolution
+
+## Common Impulse Responses
+
+* Delta function:
+    * delta function: output is identical to input
+        * ideal for data storage, communication and measurement
+    * k x delta: amplifier or attenuator
+    * delta with a shift: delays or advance a signal
+    * echo: delta function + scaled and delayed delta function
+
+* Calculus-like operations:
+    * first-difference/discrete derivative
+        * y[n] = x[n] - x[n-1]
+    * running sum/discrete integral
+        * step function that extends to infinity
+        * recursive
+        * y[n] = y[n-1] + x[n]
+
+* Low-pass and high-pass filters:
+    * low-pass filter 
+        * kernels are composed of adjacent positive points -> averages or smooths the incoming signal
+        * may have some negative points as well, e.g. a sinc(x) kernel
+        * exponential decay: simplest recursive filter
+        * rectangle: best for reducing noise while keeping edge sharpness
+        * sinc: used to separate one band of frequencies from another
+    * high-pass filter
+        * common design method: design low-pass kernel, transform into what you need
+            * delta impulse response  -> passes the signal
+            * low pass -> only passes low frequence
+            * superposition: delta impluse minus low pass -> high pass
+            * delta impulse usually added at the center of symmetric coefficients or
+              at location 0 if not symmetric
+            * sum of all impulse points must be 0 to achieve 0 DC gain
+    * cutoff frequency changed by making kernel wider or narrower
+    * if low-pass filter has DC gain of 1, then the sum of all impulse response points must be 1
+
+* Causal and Noncausal Signals
+    * causal system: all kernel samples before 0 are 0
+
+* Zero phase, linear phase, nonlinear phase
+    * zero phase: left-right symmetry around sample 0
+    * linear phase: left-right symmetry around some other sample
+    * non-linear phase: no left-right symmetry
+    * why? Frequency spectrum has magnitude and phase. Spectrum of a symmteric around 0 signal has
+      phase 0, etc. (XXX: try this out in Python?)
+
+## Mathematical Properties
+
+* Commutative Property
+* Associative Property
+* Distributive Property
+* Transference between Input and Output: linear operations on x[n] will also happen on y[n]
+* Central Limit Theorem: if a pulse-like signal is convolved with itself many times, a Gaussian is produce
+    * Width of the Gaussian = original pulse width * sqrt(number of convolutions)
+* Correlation
+    * cross-correlation: 2 signals correlated into third signal
+    * auto-correlation: signals correlated with itself
+    * width of the target signal is 2x size of original signal
+    * optimal technique for detecting a known waveform in random white noise
+        * also called: matched filtering
+    * in convolution machine, signal is flipped left-for-right. Not true for correlation machine.
+
+## Speed
+
+* Signal of N samples and signal of M sample -> N x M multiplication for convolution
+* Better solution: use FFT.
+
+
+# Chapter 8 - The Discrete Fourier Transform
+
+## The Family of the Fourier Transform
+
+
