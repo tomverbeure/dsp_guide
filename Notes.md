@@ -432,4 +432,57 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
 
 ## The Family of the Fourier Transform
 
+* Why decompose into sinusoids? Because of sinusoidal fidelity
+* Sinusoids are the only waveform that have this property
+* 4 kinds of Fourier transforms:
+    * Aperiodic-Continuous -> Fourier Transform
+    * Periodic-Continuous -> Fourier Series
+    * Aperiodic-Discrete -> Discrete Time Fourier Transform
+    * Periodic-Discrete -> Discrete Fourier Transform
+* There is no Fourier transform that deals with finite length signals. All go from negative to positive infinity
+    * The way around this: extend buffer either by zeros (aperiodic) or as periodic repeating.
+    * However, aperiodic means infinite number of sinusoids -> only discrete fourier transform can be used for DSP
+* Each Fourier transform has real and complex versions
+    * Complex version adds a lot of complexity. Only small part of the book touches on this.
+
+## Notation and Format of the Real DFT
+
+* N point input signal (time domain) -> 2 N/2+1 output signals: amplitudes of sines and cosines (freq domain)
+    * Forward DFT: from time domain to freq domain
+    * Inverse DFT: from freq domain to time domain
+* Number of samples in time domain is usual power of 2: efficient for FFT
+* Freq domain has 2 parts of N/2+1 values: Re X[n] (cosines) and Im X[n] (sines)
+
+
+## The Frequency Domain's Independent Variable
+
+* Horizontal axis in freq domain can be referred in 4 different ways. (Example with N=128 time domain samples)
+    * 0 to 64: an index into the Re X[n] and Im X[n] array
+    * 0 to 0.5: fraction of the sample rate. Divide horizontal axis by N
+    * 0 to Pi: multiply fraction by 2Pi. Often used by mathematicians
+    * analog frequency: fraction multiplied by sampling frequency. E.g. sampled at 10kHz -> 0 to 5kHz
+
+## DFT Basis Functions
+
+* sine and cosine waves of DFT are basis functions: unity amplitude.
+* coefficients ck -> coefficient for cosine basis function that has k complete cycles over the number of samples N.
+* Re X[0] holds the DC value.
+* Im X[0] value is irrelevant because basis function is zero everywhere.
+* cN/2: alternates between -1 and 1
+* sN/2: always zero (crossings), just like s0 -> also irrelevant
+* A time signal with N samples only has N relevant numbers in the freq domain
+
+## Synthesis, Calculating the Inverse DFT
+
+* Synthesis equation: sum of N+1 weighed cosine and N+1 weighed sine waveforms
+    * Weights in the sum are scaled due to some normalization!
+        * different for weight c0 and weight cN/2
+    * IOW: frequency domain values != sinusoidal weights
+    * why? because frequency domain is defined as spectral density
+        * freq domain values represent how much signal is present per unit of bandwidth
+        * the amount of bandwidth on the left and on the right (is only 1/2 of the ones in the middle)
+        * so: middle values -> 2/N bandwidth, left and right: 1/N bandwidth
+* an impulse in the time domain -> constant value in the freq domain (XXX: try with Python)
+
+## Analysis, Calculating the DFT
 
