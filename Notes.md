@@ -486,3 +486,77 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
 
 ## Analysis, Calculating the DFT
 
+3 different ways to calculate DFT
+* DFT by Simultaneous Equation
+    * Given N values in time domain, calculate N values in freq domain
+    * Set of linear equations
+    * Solve, e.g. using Gaussian elimination
+    * Never used due to high number of calculations
+* DFT by Correlation
+    * Multiply input signal samples with correspodning sample of one of the basis function, sum -> coefficient
+    * "analysis equation"
+    * No special treatment of first and last point needed
+    * Requires basis functions to be orthogonal (which they are)
+* FFT
+    * See later
+
+## Duality
+
+* Analysis (DFT) and synthesis (inverse DFT) equations are strikingly similar: in both cases, known values are
+  multiplied with the basis functions and added together
+* This symmetry is callded duality
+* A single point in the time domain corresponds to a sinusoid in the frequency domain. And a single point in the
+  frequency domain corresponds to a sinusoid in the time domain. (XXX: try with Python)
+* convolution in the time domain corresponds to multiplication in the freq domain. And convolution in the
+  freq domain corresponds to multiplication in the time domain
+
+## Polar Notation
+
+* cosine/sine = rectangular notation: Re X[] and Im X[]
+* polar notation: Magnitude of X[] and Phase of X[] (Mag X[] and Phase X[])
+* Simple trigonometric conversion function from one notation to the other
+* First and last point should alway have Phase == 0.
+* rectangular almost always used for mathematical calculations. Polar is often easier to understand
+  for humans and graphs
+
+## Polar Nuisances
+
+* radians vs degrees
+* divide by zero error when converting from rectangular to polar, due to Im X[]/ Re X[]
+* incorrect arctan
+* phase of very small magnitudes -> introduces roundoff noise
+* 2Pi ambiguitiy of the phase
+* magnitude is always positive
+* spikes between -Pi and Pi due to noise
+
+# Chapter 9 - Applications of the DFT
+
+## Spectral Analysis of Signals
+
+* DFT with larger number of samples provides better frequency resolution but doesn't reduce
+  noise level. Alternative: multiple shorter segments -> shorter DFTs, then average frequency values
+* multiply segments with Hamming window
+* random noise reduces in proportion to square root of the number of segments.  (XXX: try in Python)
+    * Sometimes use millions of segments to bring out weak features
+* alternative to reduce noise
+    * take very long DFT
+    * use low pass digital filter to smooth the spectrum.
+        * e.g. average 64 adjacent samples in the original spectrum to create filtered spectrum
+* when to use what solution?
+    * segments with averaged results is usually the best choice. 
+
+* many measured frequency spectra contain 1/f noise (aka pink noise). Source of it is unknown. 
+* what when 2 frequencies close together?
+    * sample spacing must be smaller than the distance between the 2 peaks
+    * length of the signal limits the frequency resolution: over a short run, 2 sine waves of very close
+      frequency added together may look like one signal.
+* what if input signal falls between 2 basis functions?
+    * it becomes a peak with tails that extend pretty far
+    * Hamming window reduces the extent of the tails
+        * however, it also reduces the resolution by making all peaks wider.
+        * windows create tradeoff between resolution and spectral leakage
+* effect of windowing in the frequency domain
+    * multiplication in time domain -> convolution in freq domain
+    * spectrum of the windowing function is convolved with the original peak
+* select N points from signal, but then add an amount of padding zeros beyond the windowing curve (XXX: try with Python)
+    * has the effect of sampling the frequency spectrum's continuous curve
