@@ -560,3 +560,131 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
     * spectrum of the windowing function is convolved with the original peak
 * select N points from signal, but then add an amount of padding zeros beyond the windowing curve (XXX: try with Python)
     * has the effect of sampling the frequency spectrum's continuous curve
+* flat-top window: used when amplitude of spectral peak must be measured accurately. 
+    * ensures that one or more spectral samples will have the correct peak value
+    * but poor frequency resolution
+    * shape of flat-top window is exactly the filter kernel of a low-pass filter.
+
+## Frequency Response of Systems
+
+* Fourier transform -> every input signal can be represented as set of cosines with amplitude + phase
+* DFT can also be used to represent each output signal in similar form
+* Any linear system can be completely described by how it changes amplitude and phase of cosine waves passing
+  through it
+* This is called the frequency response
+* one-to-one relationship between impulse response (time domain) and frequency response (freq domain) through
+  the Fourier transform
+* time domain: x * h -> y, freq domain: X x H -> Y
+* padding impulse response with zeros -> DFT -> higher resolution frequency response
+    * nothing limits you from adding more zeros to get higher resolution!
+    * even though the impulse response is discrete, the corresponding freq response is continuous
+
+## Convolution via the Frequency Domain
+
+* given impulse response and output signal, what's the input signal?
+    * deconvolution: hard in the time domain, easy in freq domain: just divide Y by H
+* convolution is mathematically slow, FFT is very fast
+* amplitude/phase freq domain convolution is easy: multiply amplitude, add phase.
+* rectangular form freq domain convultion: some trig math required
+* Convolution with 2^n input samples and some other-length impluse response -> non-2^n output
+    * when doing convolution via freq domain -> excess output samples get rolled back beginning of 2^n output
+    * distorted output
+    * "circular convolution"
+    * avoided by padding the input samples with zeros to the next 2^n (XXX: try with Python)
+* FFT requires power of 2 nr of samples. Freq domain convolution usually can't guarantee this ->
+  circular convolution: distorted version of the correct signal
+
+# Chapter 10 - Fourier Transform Properties
+
+
+## Linearity of the Fourier Transform
+
+* homogeneity: change in amplitude in one domain produces an identical change in amplitude in the other domain
+    * rectangular form: both Re and Im are scaled accordingly
+    * polar form: magnitude is scaled accordingly.
+* addition: x1[n] + x2[n] = x3[n] -> Re X1[f] + Re X2[f] = Re X3[f], Im X1[f] + Im X2[f] = Im X3[f], 
+    * doesn't work with polar, need to transfer back and forth to rectangular format
+* Fourier transform is NOT shift invariant
+
+## Characteristics of the Phase
+
+* A shift of s samples in time domain, results in 2Pi x s x f changes in phase
+* when signal shifted to the right, phase shows decreasing slope (XXX: Python)
+* phase is flat line when timedomain signal is symmetrical and centered around 0
+    * Centered around the middle sample is also centered around 0, due to wrap-around in the time domain.
+* What happens when things rotate around? What determines if the slope goes upwards/flat/downwards at tipping point?
+    * Ambiguitities between Pi, 2Pi, ... (?)
+    * See chapter 8. (Polar Nuisances subsection?) 
+    * Try this out with Python to really understand.
+* Phase shift is proportional to the frequency of the sinusoid being shifted
+    * 1 sample shift of low frequency sinusoid -> small phase shift
+    * 1 sample shift of highest possible frequency 'sinusoid' -> 180 degree phase shift
+* Example on how the phase of the FFT, not the magnitude, encodes where interesting changes happen in the
+  time domain.
+    * This is becase a rapid change/edge in the time domain requires that all sine waves are changing in the
+      same direction at that time. That's determined by the phase.
+    * time domain encoding -> phase is most important, freq domain encoding -> magnitude matters (e.g. audio)
+* Symmetrical signal in time domain has zero phase across the board.
+    * When decomposed into left part (and zeros) and right part (and zeros), you get opposite phase
+    * Added together -> they cancel eachother out.
+    * flipping a time domain signal from left to right -> magnitude stays the same and phase gets inverted
+    * changing the sign of the phase == "complex conjugation", represented with a *
+        * X[F] = Mag X[F], Phase X[F], X*[F] = Mag X[F], -Phase X[F]
+        * X[F] = Re X[F], Im X[F], X*[F] = Re X[F], -Im X[F]
+        * x[n] -> X[F], x[-n] -> X*[F]
+        * a[n] * b[n] -> convolution, a[n] * b[-n] -> correlation
+        * A[f] x B[f] -> convolution, A[f] x b*[f] -> correlation
+        * X[f] x X*[f] -> phase 0 result -> x[n] * x[-n] = left/right symmatrical around sample 0
+
+## Periodic Natures of the FFT
+
+* DFT: periodicity in time domain AND in frequency domain
+* DFT assumes period signal -> time domain aliasing
+    * transformations done in the frequency domain that are supposed to only impact later samples 
+      in the time domain might roll around to earlier samples
+    * e.g. circular convolution
+* periodicity in the frequency domain -> frequence domain aliasing
+* a cosine in time domain maps to +f. -f. and an infinite number of higher fs
+
+<summarize>
+
+## Compression and Expansion, Multirate methods
+
+* Continuous time Fourier Transform: compression in one domain -> expansion in the other domain
+    * x(t) -> X(f), then x(kt) -> 1/k x X(f/k)
+* DFT: similar, but... 
+    * aliasing
+    * what was the underlying 'real' signal?
+        * depends on whether information was encoded in time domain or freq domain.
+        * time domain -> smooth time domain interpolation: linear interpolation, spline interpolation, ...
+        * freq domain -> pad freq with zeros -> IDFT.
+            * has *exactly* the same frequencies, but time domain signal will have ringing at sharp edges etc.
+
+## Multiplying Signals (Amplitude Modulation)
+
+* convolution in one domain <-> multiplication in the other domain
+* AM modulation: multiply in time domain -> convolution in freq domain
+* negative frequencies of baseband signal are moved up left of carrier
+    * carrier wave, upper sideband, lower sideband
+
+## The Discrete Time Fourier Transform
+
+* operates on aperiodic, discrete signals
+    * time domain signal is still discerete
+    * frequency domain version is continuous
+        * unit: f or w (lower case omega, removes the need of 2pi)
+* inverse DTFT: 
+    * for IDFT, samples 0 and N/2 divided by 2, not necessary for IDTFT
+    * 2/N normalization -> 1/pi normalization
+* used for mathematical derivations
+
+## Parseval's Relation
+
+* time domain and freq domain are equivalent representations -> they have the same energy as well
+* subtlety when dealing with X[0] and X[N/2]: divide by 1/sqrt(2)
+* few practical uses in DSP
+
+
+# Chapter 11 - Fourier Transform Pairs
+
+
