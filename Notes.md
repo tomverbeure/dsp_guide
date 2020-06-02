@@ -687,4 +687,36 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
 
 # Chapter 11 - Fourier Transform Pairs
 
+* When a simple shape A in time domain -> a simple shape B in freq domain
+* Duality: ... and shape A in freq domain -> shape B in time domain
+    * E.g. rectangular pulse <-> sync
+
+## Delta Function Pairs
+
+* impluse in time domain 
+    * flat magnitude and linear phase in freq domain (mag/phase)
+    * sinusoid in freq domain (Re/Im) !
+    * location of pulse in time domain determins freq of sinusoid in freq domain
+
+## Sinc Function
+
+* rectangular puse in time domain
+    * sinc in freq domain
+* wrapped and unwrapped magnitude
+    * wrapped: magnitude is always positive -> phase 180 when magnitude was supposed to be negative
+    * unwrapped: magnitude can be positive and negative
+* sinc doesn't decay to 0 at 0.5 f
+    * aliasing...
+
+
+... a bit more stuff... (TODO)
+
+
+# Chapter 12 - The Fast Fourier Transform
+
+## Real DFT Using the Complex DFT 
+
+* FFT is based on the complex DFT, but can also be used for real FFT.
+* Set all Im parts in the time domain to 0 (duh)
+* FFT calculates N points for Re and Im in f domain. Samples 0 to N/2 correspond to spectrum of real DFT
 
