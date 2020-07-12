@@ -22,4 +22,10 @@ Various other resources:
         Excellent guide with theory and practise about decoding FM signals.
             
 
+Various to read:
+
+* [Optimal Beamforming](https://www.comm.utoronto.ca/~rsadve/Notes/BeamForming.pdf)
+* [Principles of minimum variance robust adaptive beamforming design](https://users.aalto.fi/~vorobys1/SP13.pdf)
+* [Robust Minimum Variance Beamforming](http://stanford.edu/~boyd/papers/pdf/rmvbBookChapter.pdf)
+* [Polyphase Filters](http://www.ee.ic.ac.uk/hp/staff/dmb/courses/DSPDF/01200_Polyphase.pdf)
 

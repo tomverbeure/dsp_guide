@@ -719,4 +719,138 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
 * FFT is based on the complex DFT, but can also be used for real FFT.
 * Set all Im parts in the time domain to 0 (duh)
 * FFT calculates N points for Re and Im in f domain. Samples 0 to N/2 correspond to spectrum of real DFT
+* calculation real IFFT using complex IFFT
+    * requires correct loading of negative frequencies
+
+## How the FFT works
+
+## FFT Programs
+
+* In-place computation: same arrays are used for input, intermediate storage, and output
+* decimation in frequency vs decimation in time
+    * different order in which operations are performed
+    * not very important
+* Complex DFT has stronger duality between time and freq than real DFT
+    * FFT and IFFT are almost identical: just adjust some data at the end
+
+## Speed and Precision Comparisons
+
+* FFT is more precise because less operations -> less rounding errors
+
+## Further Speed Increases
+
+* some optimizations -> between 20% and 40% faster
+* stop decomposition 2 stages earlier -> compute freq domain with 4-point sine and cosine
+* real FFT: don't calculations that only for imaginary part of time domain
+
+# Chapter 13 - Continuous Signal Processing
+
+Techniques for continuous signal processing nearly identical to DSP. Only theoretical.
+
+## The Delta Function
+
+* Continous signals can be decomposed into scaled and shifted delta functions
+* Very short pulses as input to a system 
+    * Shape of the input pulse doesn't really matter
+    * Shape of the output is determined by the system
+    * Area under the pulse determines amplitude
+* continuous delta function:
+    * infinitesimally brief
+    * occurs at time zero
+    * area of 1
+    * amplitude is infinite, but this doesn't matter.
+* output of delta function is the impulse response
+
+## Convolution
+
+* Can be viewed from the input side and from the output side
+    * from input side: best to understand conceptually
+    * from output side: matches mathematics
+* math can be complicated, with a lot of piecemeal sections
+
+## The Fourier Transform
+
+* periodic/aperiodic
+    * periodic -> Fourier Series
+    * aperiodic -> Fourier Transform
+
+## The Fourier Series
+
+* periodic signals -> frequency spectrum has harmonics
+* spectrums can be viewed in 2 ways:
+    * continuous, but zero except at the harmonics
+    * discrete and only defined at the harmonics
+* frequency multiplication
+    * Create 10MHz signal
+    * distort the sine wave by clipping with a diode -> harmonics
+    * bandpass filter
+    * sequential stages for doublers and triplers
+    * Fourier series describes the amplitude of the multiplied signal depending
+      on the selected distortion type and the selected harmonic
+
+# Chapter 14 - Introduction to Digital Filters
+
+## Filter Basics
+
+* separation of signals or restoration of signals
+* digital filters 
+    * can achieve thousands of times better performance than analog filters
+    * performance of filter itself is often ignored (because they're so good), 
+      emphasis shifts to limitations of the signal and the theoretical issues
+      to process the signal.
+* typical input domains: time or space
+
+* every linear filter has: impulse response, step response, frequency response
+    * each contains complete information of the filter
+* FIR filter: impulse response convolution is used to create a filter, the impulse
+  response is also called the filter kernel
+* IIR filter: digital filter with recursion
+    * filter output is not only a weighed sum of the input, but also has
+      weighed sum of previous output values
+    * defined by recursion coefficients
+
+* dBV: signal is referenced to a 1 volt RMS signal
+* dBm: signal is referenced to signal producing 1mW into a 600 Ohm load (~0.78 V RMS)
+* -3dB:  amplitude is reduced to 0.707 and power is reduced to 0.5.
+
+## How Information is Represented in Signals
+
+* information either representated in the time domain or in the frequency domain
+    * time domain information -> check step response
+    * freq domain information -> check freq response
+
+## Time Domain Parameters
+
+* step response is more useful than impulse response: it matches how humans view information
+* parameters:
+    * risetime
+    * overshoot
+    * linear phase
+
+## Frequency Domain Parameters
+
+* passband
+* stopband
+* transistion band
+    *  very narrow -> fast roll-off
+
+* parameters:
+    * fast roll-off
+    * passband ripple
+    * stopband attenuation
+    * not: phase
+        * usually not very important for freq domain information
+        * if necessary, it's easy to make a digital filter with perfect phase response
+
+# High-Pass, Band-Pass and Band-Reject Filters
+
+* Design low pass filter -> convert
+* 2 methods to go from low pass to high pass filter
+    * spectral inversion
+    * spectral reversal
+
+* spectral inversion
+    * 
+
+
 
