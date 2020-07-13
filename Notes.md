@@ -403,7 +403,7 @@ e.g. head or tails: 50% probability, but trying 1000 times won't give you a 500/
     * zero phase: left-right symmetry around sample 0
     * linear phase: left-right symmetry around some other sample
     * non-linear phase: no left-right symmetry
-    * why? Frequency spectrum has magnitude and phase. Spectrum of a symmteric around 0 signal has
+    * why? Frequency spectrum has magnitude and phase. Spectrum of a symmetric around 0 signal has
       phase 0, etc. (XXX: try this out in Python?)
 
 ## Mathematical Properties

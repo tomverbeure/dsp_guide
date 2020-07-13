@@ -29,3 +29,5 @@ Various to read:
 * [Robust Minimum Variance Beamforming](http://stanford.edu/~boyd/papers/pdf/rmvbBookChapter.pdf)
 * [Polyphase Filters](http://www.ee.ic.ac.uk/hp/staff/dmb/courses/DSPDF/01200_Polyphase.pdf)
 
+
+* [Understanding the FFT Algorithm](http://jakevdp.github.io/blog/2013/08/28/understanding-the-fft/)
