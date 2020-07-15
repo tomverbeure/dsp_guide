@@ -844,13 +844,161 @@ Techniques for continuous signal processing nearly identical to DSP. Only theore
 
 # High-Pass, Band-Pass and Band-Reject Filters
 
-* Design low pass filter -> convert
+* Design low pass filter -> convert to what you need
+
 * 2 methods to go from low pass to high pass filter
     * spectral inversion
     * spectral reversal
 
 * spectral inversion
-    * 
+    * invert all samples in the filter kernel, then put a 1 in the symmetry center of the kernel.
+    * low pass becomes high pass
+    * band pass becomes band reject
+    * low-pass filter must have the same phase as the low-frequency components exiting the
+      all pass system. This imposes 2 restrictions:
+        * the original filter kernel must have left-right symmetry (zero or linear phase)
+        * the impulse must be added at the center of symmetry
+
+* spectral reversal
+    * high pass filter kernel is formed by changing the sign of every other sample of the low pass
+      filter kernel.
+        * equivalent to multiplying filter kernel with sinusoid with frequency of 0.5.
+        * this shifts the freq domain by 0.5
+    * flips the spectrum left to right
+
+* low pass and high pass filters combined into band pass and band reject
+    * band reject: add 2 kernels together
+    * band pass: convole 2 kernels together
+
+## Filter Classicification
+
+* 3 filter categories
+    * time domain
+    * frequency domain
+    * custom
+
+* 2 ways to implemented
+    * convolution (FIR)
+    * recursive (IIR)
+
+* FIR filters have far better performance than IIR filters, but are much slower (more math)
+
+# Chapter 15 - Moving Average Filters
+
+* most common filter in DSP
+    * easiest to understand
+    * easiest to implement
+    * optimal for a common task: reduce noise while maintaining sharp step response
+* worst filter for frequency domain encoded signals
+* similar filters: Gaussian, Blackman, multiple pass moving average
+
+## Implementation by Convolution
+
+* convolution with a very simple kernel: rectangular pulse with area of 1
+
+## Noise Reduction vs Step Response
+
+* lowest possible noise for a given edge sharpness
+* amount of noise reduction ~ sqrt(number of averaged samples)
+* noise is random -> for a given edge sharpness, no preferential input sample and coefficient -> moving average is best
+
+## Frequency Response
+
+* very slow roll-off
+* terrible stopband attenuation
+* very good at smoothing, but terrible as a low-pass filter
+
+## Relatives of the Moving Average Filter
+
+* some signals need a mix of time domain and freq domain processing
+    * e.g. TV signals: time domain -> intensity, but freq domain for color bands etc.
+
+* multiple-pass moving average filters
+    * run signal multiple times through moving average filter
+    * trends towards gaussian the more you do it
+    * step response becomes S-curve
+* Gaussian filter
+    * Frequency domain response also Gaussian
+* Blackman window as filter kernel
+
+All 3 are better for the following reasons:
+    * better stopband attenuation
+    * filter kernels taper off to smaller amplitudes near the end
+    * step response is smooth curve instead of abrupt line
+    * noise reduction capabilities are similar while step response remains good
+
+* Blackman: has better step response from 10% to 90% than moving average (but not from 0% to 100%)
+
+* biggest difference: execution speed
+    * moving average is fastest available when implemented recursive
+    * Gaussian and Blackman require convolution -> very slow
+
+## Recursive Implementation
+
+* Add new point to previous result, subtract olds point from previous result
+* different than most recursive filter: there's no infinite long tail
+
+## Chapter 16 - Windowed-Sinc Filters
+
+* sinc = ideal low-pass filter
+* need to truncate because sinc is infinite length -> introduces ripple in frequency domain
+* multiply kernel with Hamming or Blackman window
+    * other windows not worth using
+    * Hamming has low stopband attenuation, and more ripple but 20% faster roll-off than Blackmann
+    * Blackmann should be your first choice
+
+## Designed the Filter
+
+* select cutoff frequency Fc and filter kernel length M
+* M ~ 4/BW
+* for the same roll-off, a Blackman filter needs 20% more filter taps than a Hamming filter
+
+* windowed-sync filters behave identical between pass band and stopband (unlike other filters)
+    * makes them ideal for spectral inversion
+
+* Large long-tail with small coefficients -> best used with floating point
+* ringing -> terrible performance for time domain encoded signals
+
+## Examples of Windowed-Sinc Filters
+
+* Example of separating 2 components from EKG signal
+
+## Pushing it to the Limit
+
+* Cascaded window-sinc filters -> stopband attenuation of -148dB (but slower roll-off)
+    * Need double precision FP beyond 100dB
+* for very fast roll-off, just increase number of coefficients
+
+* not optimal for separating frequencies, but usually little to gain by going for
+  much more mathematically complex filters.
+
+
+# Chapter 17 - Custom Filters
+
+* tailor made filters for a particular applications
+    * deconvolution filter: restoring signal that has seen unwanted convolution
+    * optimal filtering: separating signals with overlapping spectra
+
+## Arbitrary Frequency Response
+
+* instead of using mathematic equations to come up with filter kernel and fourtier
+  transform, use discrete array of numbers
+
+* process
+    * chose desired filter spectra by filling in magnitude array
+        * length of 512 is a good number
+    * chose 0 for phase array (for example)
+    * take inverse FFT
+    * shift, truncate to smaller kernel, apply window
+    * test filter kernel by applying FFT
+        * pad kernal with zeros for increased resolution of the spectrum
+
+* it's not possible to use the kernel that's the results of the IFFT directly
+    * the frequencies in between the defined points of the spectrum aren't
+      a smooth interpolation
+    * an infinitely long impulse response aliased onto itself
+
+## Deconvolution
 
 
 
