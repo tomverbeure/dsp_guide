@@ -1000,5 +1000,29 @@ All 3 are better for the following reasons:
 
 ## Deconvolution
 
+* recreate the signal before the convolution took place
+	* undo amplitude and phase changes
+* requires characteristics of the convolution except when it's a blind deconvolution
+* solve in frequency domain: convert one spectrum to anoth
+* can't be too aggressive
+
+## Optimal Filters
+
+* Extract a signal from noise
+* best filter depends on what is considered best
+* moving average filters: fastest step response for a given noise reduction
+* matched filter: kernel is opposite for the incoming signal -> maximum correlation using convolution
+* Wiener filter: separates signals based on their frequency spectra
+    * gain at each frequency is determined by relative amount of signal vs noise for that frequency
+    * maximizes the ratio of signal power to the noise power
+* optimal filters often fail in practicality
+    * amount of extra performance may not be worth extra program complexity
+    * the thing for which they are optimal are predetermined and can't be tuned
+    * Weiner and match filter use slow convolution
+ 
+# Chapter 18 - FFT Convolution
+
+## The Overlap-Add Method
+
 
 
