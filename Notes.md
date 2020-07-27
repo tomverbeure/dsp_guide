@@ -1024,5 +1024,39 @@ All 3 are better for the following reasons:
 
 ## The Overlap-Add Method
 
+* filter long signal in segments
+    * decompose the signal into simple components
+    * process each component individually
+    * recombine into final signal
+* N sample signal with M sized kernel -> result is N+M-1 samples long
+
+## FFT Convolution
+
+* Uses the overlap-add method
+    * only difference is the way input segments are converted into output segments
+    * FFT should be same length as the output segment to avoid circular convolution
+    * pad input segment and input kernel so that sum is power of two and length of output kernel
+        * e.g. 400 pt kernel -> 1024 FFT -> 1024 - 400 + 1 = 625 segment
+        * 400 pt kernel and 625 pt sample segment padded to 1024
+
+## Speed Improvements
+
+* Filter kernels < ~60pt -> regular convolution, other FFT convolution
+* When using FFT convolution, size of filter kernel has minimal performance impact
+    * 16000 pt kernel only takes 2x time of a 64 pt kernel
+* less calculation (faster) -> also more precision
+
+# Chapter 19 - Recursive Filters
+
+## The Recursive Method
+
+* aka IIR
+* recursion coefficients: in practise no more than ~12, otherwise filter becomes unstable
+* recursive filter bypass a longer convolution
+* impulse response is usually infinitely long exponential decay
+    * -> ~ convolution with infinitely long filter kernel
+    * relation between recursion coefficients and filter's response -> z-transform
+
+
 
 
